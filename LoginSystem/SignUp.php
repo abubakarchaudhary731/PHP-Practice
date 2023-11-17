@@ -1,3 +1,23 @@
+<?php 
+$showAlert = false;
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    include "Components/DB_Connect.php";
+    $username = $_POST["username"];
+    $password = $_POST["password"];
+    $cpassword = $_POST["confirmpassword"];
+
+    if ($password == $cpassword && $username) {
+        $sql = "INSERT INTO `users` (`username`, `password`, `date_created`) VALUES ('$username', '$password', current_timestamp())";
+        $result = mysqli_query($conn, $sql);
+        if ($result) {
+            $showAlert = true;
+        }
+    } else {
+        $err = "Passwords do not match";
+    }
+}
+?>
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -7,7 +27,22 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
   </head>
   <body>
-    <?php require "Components/NavBar.php" ?>
+<?php 
+require "Components/NavBar.php";
+if ($showAlert) {
+    echo '  <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Success!</strong> Your Account is now Created and you can Login.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>';
+}
+if ($err) {
+    echo '  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Danger!</strong> . ' .$err.'
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>';
+}
+?>
+
     <div class="container my-5 mx-5">
         <h2 class="text-center"> Sign Up </h2>
         <div class="mx-5 px-5">
