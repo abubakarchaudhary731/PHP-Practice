@@ -5,17 +5,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST["username"];
     $password = $_POST["password"];
     $cpassword = $_POST["confirmpassword"];
-
-    if ($password == $cpassword && $username) {
-        $sql = "INSERT INTO `users` (`username`, `password`, `date_created`) VALUES ('$username', '$password', current_timestamp())";
-        $result = mysqli_query($conn, $sql);
-        if ($result) {
-            $showAlert = true;
-        }
+    
+    $existSql = "SELECT * FROM `users` WHERE username = '$username'";
+    $existResult = mysqli_query($conn, $existSql);
+    $existNumRows = mysqli_num_rows($existResult);
+    if ($existNumRows > 0) { 
+        $err = "Username Already Exists";
     } else {
-        $err = "Passwords do not match";
+      if ($password == $cpassword) {
+          $hash = password_hash($password, PASSWORD_DEFAULT);
+          $sql = "INSERT INTO `users` (`username`, `password`, `date_created`) VALUES ('$username', '$hash', current_timestamp())";
+          $result = mysqli_query($conn, $sql);
+          if ($result) {
+              $showAlert = true;
+          }
+      } else {
+          $err = "Passwords do not match";
+      }
     }
-}
+
+    }
+
 ?>
 
 <!doctype html>
