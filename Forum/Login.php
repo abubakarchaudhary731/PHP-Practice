@@ -10,7 +10,7 @@
 <!-- PHP Code -->
 <?php 
 $err = "";
-require "DBConnect.php";
+require "Components/DBConnect.php";
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 $email = $_POST['email'];
 $password = $_POST['password'];
@@ -24,6 +24,7 @@ $password = $_POST['password'];
             if (password_verify($password, $row["users_password"])) {
                 session_start();
                 $_SESSION["loggedin"] = true;
+                $_SESSION["user_id"] = $row["users_id"];
                 $_SESSION["email"] = $email;
                 header("Location: index.php");
             } else { 
