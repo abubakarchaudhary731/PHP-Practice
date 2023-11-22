@@ -39,7 +39,7 @@ require "Components/DBConnect.php";
     $comment = $_POST['desc'];
     $thread_id = $id;
     $comment_user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
-    echo $comment_user_id;
+    // echo $comment_user_id;
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       $sql = "INSERT INTO `comments` (`comment_content`, `comment_thread_id`, `comment_user_id`, `comment_time`) VALUES ('$comment', '$thread_id', '$comment_user_id', current_timestamp())";
@@ -70,25 +70,34 @@ require "Components/DBConnect.php";
     $id = $_GET['threadid'];
     $sql = "SELECT * FROM `comments` WHERE `comment_thread_id` = $id";
     $result = mysqli_query($conn, $sql);
-    while ($row = mysqli_fetch_assoc($result)) {
+    $num = mysqli_num_rows($result);
+    if ($num > 0) {
+      while ($row = mysqli_fetch_assoc($result)) {
         $id = $row['comment_id'];
         $title = $row['comment_content'];
         $comment_time = $row['comment_time'];
-        // $sql2 = "SELECT * FROM `users` WHERE `user_id` = $row[user_id]";
-        // $result2 = mysqli_query($conn, $sql2);
-        // $row2 = mysqli_fetch_assoc($result2);
+        $sql2 = "SELECT * FROM `users` WHERE `users_id` = $row[comment_user_id]";
+        $result2 = mysqli_query($conn, $sql2);
+        $row2 = mysqli_fetch_assoc($result2);
           echo 
           '<div class="media d-flex gap-3 my-2">
               <img class="align-self-start mr-3 rounded-circle" src="https://source.unsplash.com/500x400/?coding" width="60px" height="60px" alt="Generic placeholder image">
               <div class="media-body flex-grow-1">
                 <div class="d-flex justify-content-between">
-                  <h3>'. $row2['user_email'] . '</h3>
+                  <h5> <b>'. $row2['users_email'] . '</b></h5>
                   <i> <small> At: '. $comment_time. ' </small></i>
                 </div>
               <p>'. $title . '</p>
               </div>
           </div>';
     }
+    } else {
+      echo '<div class="p-4 bg-light w-100 rounded-4 text-center">
+              <h2>No Comments Found </h2>
+              <p>Be the First Person to Comment for this question.</p>
+            </div>';
+    }
+    
     ?>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>

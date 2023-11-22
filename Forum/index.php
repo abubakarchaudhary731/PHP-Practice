@@ -23,14 +23,14 @@ require "Components/DBConnect.php";
     ?>
     <div class="container mt-3">
       <h1 class="text-center"> iForum -Browse Categories</h1>
-      <div class="d-flex justify-content-between flex-wrap">
-      <?php 
+      <div class="d-flex gap-5 flex-wrap mt-4">
+    <?php 
     $sql = "SELECT * FROM `categories`";
     $result = mysqli_query($conn, $sql);
 
     while ($row = mysqli_fetch_array($result)) { ?>
-        <div class="card my-3" style="width: 18rem;">
-            <img src="https://source.unsplash.com/500x400/?coding" class="card-img-top" alt="...">
+        <div class="card" style="width: 18rem;">
+            <img src="https://source.unsplash.com/500x400/?coding" class="card-img-top" alt="Not Found">
             <div class="card-body">
                 <h5 class="card-title">
                     <a href="./View.php?view=<?php echo $row['category_id']; ?>">

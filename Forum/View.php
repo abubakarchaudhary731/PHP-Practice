@@ -81,40 +81,47 @@ session_start(); // Start the session
         $id = $_GET['view'];
         $sql = "SELECT * FROM `threads` WHERE `thread_category_id` = $id";
         $result = mysqli_query($conn, $sql);
-                  
-        while ($row = mysqli_fetch_assoc($result)) {
-            $id = $row['thread_id'];
-            $title = $row['thread_name'];
-            $desc = $row['thread_description'];
-            $thread_time = $row['date'];
-            $pre = $row['thread_user_id'];
-
-            $sql2 = "SELECT * FROM `users` WHERE `users_id` = $pre"; 
-            $result2 = mysqli_query($conn, $sql2);
-        
-            if (!$result2) {
-                echo "Error: " . mysqli_error($conn);
-            } else {
-                $row2 = mysqli_fetch_assoc($result2);
-                if ($row2) {
-                    echo 
-                    '<div class="media d-flex gap-3 my-2">
-                        <img class="align-self-start mr-3 rounded-circle" src="https://source.unsplash.com/500x400/?coding" width="60px" height="60px" alt="Generic placeholder image">
-                        <div class="media-body flex-grow-1">
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <b> Asked by: ' . $row2['users_email'] . ' </b>
-                                    <h5><b><a class="text-dark nounderline" href="thread.php?threadid=' . $id . '">' . $title . '</a></b></h5>
-                                </div>
-                                <i><small> At: ' . $thread_time . ' </small></i>
-                            </div>
-                            <p> ' . $desc . '</p>
-                        </div>
-                    </div>';
+        $num = mysqli_num_rows($result);
+        if ($num > 0) {
+            while ($row = mysqli_fetch_assoc($result)) {
+                $id = $row['thread_id'];
+                $title = $row['thread_name'];
+                $desc = $row['thread_description'];
+                $thread_time = $row['date'];
+                $pre = $row['thread_user_id'];
+    
+                $sql2 = "SELECT * FROM `users` WHERE `users_id` = $pre"; 
+                $result2 = mysqli_query($conn, $sql2);
+            
+                if (!$result2) {
+                    echo "Error: " . mysqli_error($conn);
                 } else {
-                    echo "No data found for user with ID: $pre";
+                    $row2 = mysqli_fetch_assoc($result2);
+                    if ($row2) {
+                        echo 
+                        '<div class="media d-flex gap-3 my-2">
+                            <img class="align-self-start mr-3 rounded-circle" src="https://source.unsplash.com/500x400/?coding" width="60px" height="60px" alt="Generic placeholder image">
+                            <div class="media-body flex-grow-1">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <b> Asked by: ' . $row2['users_email'] . ' </b>
+                                        <h5><b><a class="text-dark nounderline" href="thread.php?threadid=' . $id . '">' . $title . '</a></b></h5>
+                                    </div>
+                                    <i><small> At: ' . $thread_time . ' </small></i>
+                                </div>
+                                <p> ' . $desc . '</p>
+                            </div>
+                        </div>';
+                    } else {
+                        echo "No data found for user with ID: $pre";
+                    }
                 }
             }
+        } else {
+            echo '<div class="p-4 bg-light w-100 rounded-4 text-center">
+                    <h2>No Data Found </h2>
+                    <p>Be the First Person to ask the question.</p>
+                </div>';
         }
         ?>
 
