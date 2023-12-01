@@ -18,27 +18,32 @@ echo
       <li class="nav-item">
         <a class="nav-link active" aria-current="page" href="./index.php">Home</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-      </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-          Categories
+          Top Categories
         </a>
-        <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="#">Action</a></li>
-          <li><a class="dropdown-item" href="#">Another action</a></li>
-          <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item" href="#">Something else here</a></li>
-        </ul>
+        <ul class="dropdown-menu">';
+        $sql = "SELECT * FROM `categories` LIMIT 4";
+        $result = mysqli_query($conn, $sql);
+        if (mysqli_num_rows($result) > 0) { 
+          while ($row = mysqli_fetch_array($result)) {
+            echo '<li><a class="dropdown-item" href="./View.php?view=' . $row['category_id'] . '">' . $row['category_name'] . '</a></li>';
+          }
+        } else {
+          echo '<li><a class="dropdown-item" href="#">No Categories Found</a></li>';
+        };         
+  echo '</ul>
       </li>
       <li class="nav-item">
-        <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+        <a class="nav-link" aria-current="page" href="./contact.php">Contact</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" aria-disabled="true">About</a>
       </li>
     </ul>
     <div class="d-flex gap-3">
-        <form class="d-flex" role="search">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <form class="d-flex" role="search" action="./search.php" method="get">
+            <input class="form-control me-2" name="search" type="search" placeholder="Search any Question" aria-label="Search">
             <button class="btn btn-success" type="submit">Search</button>
         </form>';
         if (!$loggedin) {

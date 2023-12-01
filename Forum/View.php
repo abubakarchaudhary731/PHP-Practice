@@ -41,6 +41,8 @@ session_start(); // Start the session
         if (isset($_POST['name'])) {
             $title = $_POST['name'];
             $desc = $_POST['desc'];
+            $desc = str_replace("<", "&lt;", $desc);
+            $desc = str_replace(">", "&gt;", $desc);
             $cat_id = $id;
             $thread_user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
             // echo $thread_user_id;

@@ -37,6 +37,8 @@ require "Components/DBConnect.php";
     <?php 
     $id = $_GET['threadid'];
     $comment = $_POST['desc'];
+    $comment = str_replace("<", "&lt;", $comment);
+    $comment = str_replace(">", "&gt;", $comment);
     $thread_id = $id;
     $comment_user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
     // echo $comment_user_id;
