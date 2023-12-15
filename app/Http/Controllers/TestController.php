@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TestRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -20,7 +21,7 @@ class TestController extends Controller
         return view('showSingleUserData', ['singleData' => $singleData]);
     }
 
-    public function addData(Request $request)
+    public function addData(TestRequest $request)
     {
         // dd($request->all());
         $data = DB::table('tests')
@@ -59,7 +60,7 @@ class TestController extends Controller
     
     }
 
-    public function updatedData(Request $request, string $id)
+    public function updatedData(TestRequest $request, string $id)
     {
         $upadtedData = DB::table('tests')
             ->where('id', $id)
