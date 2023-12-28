@@ -27,7 +27,7 @@ class TestRequest extends FormRequest
         $userId = $this->route('id');
         return [
             'name' => 'required',
-            'email' => 'required', 'email', Rule::unique('tests')->ignore($userId),
+            'email' => ['required', 'email', Rule::unique('tests')->ignore($userId)],
             'state' => 'required',
             'phone_no' => 'required | numeric',
         ];
